@@ -1,0 +1,32 @@
+.user-list-item {
+  background-color: white;
+  border: 1px solid #c4c4c4 !important;
+  padding: 1em;
+  margin-bottom: 1em;
+
+  .card-field {
+    display: flex;
+
+    .field-label {
+      width: 10em;
+    }
+  }
+}
+
+.tag {
+  color: #096dd9;
+  background: #e6f7ff;
+  border-color: #91d5ff;
+
+  &.admin {
+    color: #cf1322;
+    background: #fff1f0;
+    border-color: #ffa39e;
+  }
+
+  &.user {
+    color: #389e0d;
+    background: #f6ffed;
+    border-color: #b7eb8f;
+  }
+}

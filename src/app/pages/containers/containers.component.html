@@ -1,0 +1,37 @@
+<nz-page-header>
+  <nz-page-header-title>
+    Received containers
+  </nz-page-header-title>
+</nz-page-header>
+<nz-list *ngIf="containers$ | async as containers" nzItemLayout="vertical">
+  <ng-container *ngIf="containers.length > 0; else empty">
+    <nz-list-item *ngFor="let container of containers" class="container-list-item">
+      <nz-list-item-meta>
+        <nz-list-item-meta-title>
+          <a href="container/{{ container.containerId }}">Container {{ container.id }}</a>
+        </nz-list-item-meta-title>
+
+        <nz-list-item-meta-description>
+          <div class="card-field">
+            <div class="field-label">Shipping</div>
+            <div>{{ container.shippingDate | date:'medium'}} </div>
+          </div>
+
+          <div class="card-field">
+            <div class="field-label">Arrival</div>
+            <div>{{ container.arrivalDate | date:'medium'}}</div>
+          </div>
+        </nz-list-item-meta-description>
+      </nz-list-item-meta>
+    </nz-list-item>
+  </ng-container>
+  <ng-template #empty>
+    <nz-list>
+      <nz-list-empty>
+        empty
+      </nz-list-empty>
+    </nz-list>
+  </ng-template>
+
+</nz-list>
+

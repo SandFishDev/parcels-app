@@ -1,0 +1,79 @@
+<nz-layout class="app-layout">
+  <nz-sider [(nzCollapsed)]="isCollapsed"
+            [nzTrigger]="null"
+            class="menu-sidebar"
+            nzBreakpoint="md"
+            nzCollapsible
+            nzWidth="256px">
+    <div class="sidebar-logo">
+      <a>
+        <img alt="logo" src="assets/container.svg">
+        <h1>Parcel App</h1>
+      </a>
+    </div>
+    <ul [nzInlineCollapsed]="isCollapsed" nz-menu nzMode="inline" nzTheme="dark">
+      <li nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="dashboard"></i>
+        <span>
+          <a routerLink="/dashboard">Dashboard</a>
+        </span>
+      </li>
+
+      <li *ngIf="roles.includes('ADMIN')" nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="inbox"></i>
+        <span>
+          <a routerLink="/containers">Containers</a>
+        </span>
+      </li>
+
+      <li *ngIf="departments.length > 0" nz-submenu nzIcon="mail" nzOpen nzTitle="Parcels">
+        <ul *ngFor="let department of departments">
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="'/parcels/' + department.name.toLowerCase()">
+              {{department.name}}
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li *ngIf="roles.includes('ADMIN')" nz-menu-item nzMatchRouter>
+        <i nz-icon nzTheme="outline" nzType="apartment"></i>
+        <span>
+          <a routerLink="/departments">Departments</a>
+        </span>
+      </li>
+
+      <li *ngIf="roles.includes('ADMIN')" nz-menu-item nzMatchRouter>
+        <i nz-icon nzTheme="outline" nzType="user"></i>
+        <span>
+          <a routerLink="/users">Users</a>
+        </span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <div (click)="isCollapsed = !isCollapsed" class="header-trigger">
+          <i [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+             class="trigger"
+             nz-icon
+          ></i>
+        </div>
+        <div (click)="logOut()" class="header-trigger">
+          <i [nzType]="'logout'"
+             nz-icon
+          ></i>
+          Log out
+        </div>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <div class="inner-content-area">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

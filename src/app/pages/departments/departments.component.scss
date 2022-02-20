@@ -1,0 +1,15 @@
+
+.department-list-item {
+  background-color: white;
+  border: 1px solid #c4c4c4 !important;
+  padding: 1em;
+  margin-bottom: 1em;
+
+  .card-field {
+    display: flex;
+
+    .field-label {
+      width: 10em;
+    }
+  }
+}

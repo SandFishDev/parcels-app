@@ -1,0 +1,15 @@
+
+<nz-page-header>
+  <nz-page-header-title>
+    Received departments
+  </nz-page-header-title>
+</nz-page-header>
+<nz-list nzItemLayout="vertical">
+  <nz-list-item class="department-list-item" *ngFor="let department of departments$ | async">
+    <nz-list-item-meta>
+      <nz-list-item-meta-title>
+        <a href="department/{{ department.id }}">Department {{ department.name }}</a>
+      </nz-list-item-meta-title>
+    </nz-list-item-meta>
+  </nz-list-item>
+</nz-list>

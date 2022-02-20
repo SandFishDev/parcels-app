@@ -1,0 +1,57 @@
+<div class="dashboard-grid">
+  <div *ngIf="roleCheck.isAdmin" class="grid-card">
+    <nz-card (click)="goTo('containers')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Containers">
+      Click here to navigate to containers.
+
+      <div *ngIf="containerStatistics$ | async as statistics">
+        <div class="card-field">
+          <div class="field-label">Total</div>
+          <div>     {{statistics.containerCount}}</div>
+        </div>
+
+        <div class="card-field">
+          <div class="field-label">Last 24h</div>
+          <div>   {{statistics.containerCountLast24Hours}}</div>
+        </div>
+      </div>
+    </nz-card>
+
+  </div>
+
+  <div *ngIf="roleCheck.isAdmin" class="grid-card">
+    <nz-card (click)="goTo('containers')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Departments">
+      Click here to navigate to departments.
+    </nz-card>
+  </div>
+  <div *ngIf="roleCheck.departments.length > 0" class="grid-card">
+    <nz-card [nzBodyStyle]="{'min-height': '10em'}" nzTitle="Parcels">
+      <nz-list *ngIf="parcelStatistics$ | async as statistics">
+        <nz-list-item *ngFor="let department of roleCheck.departments">
+          <nz-card (click)="goTo('parcels/' + department.toLowerCase())"
+                   [nzBodyStyle]="{'display': 'none'}"
+                   [nzExtra]="extra"
+                   [nzTitle]="title"
+                   class="department-card"
+                   nzHoverable>
+            <ng-template #title>
+              <div>
+                {{(department | titlecase) + ' department'}}
+                <nz-badge nzStandalone [nzCount]="statistics.parcelCountbyDepartment[department | titlecase]" nzShowZero>
+                  <a class="head-example"></a>
+                </nz-badge>
+              </div>
+            </ng-template>
+            <ng-template #extra>
+              <i nz-icon nzTheme="outline" nzType="arrow-right"></i>
+            </ng-template>
+          </nz-card>
+        </nz-list-item>
+      </nz-list>
+    </nz-card>
+  </div>
+  <div *ngIf="roleCheck.isAdmin" class="grid-card">
+    <nz-card (click)="goTo('containers')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Users">
+      Click here to navigate to users.
+    </nz-card>
+  </div>
+</div>

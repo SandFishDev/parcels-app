@@ -1,0 +1,24 @@
+
+<nz-page-header>
+  <nz-page-header-title>
+    Received users
+  </nz-page-header-title>
+</nz-page-header>
+<nz-list nzItemLayout="vertical">
+  <nz-list-item class="user-list-item" *ngFor="let user of users$ | async">
+    <nz-list-item-meta>
+      <nz-list-item-meta-title>
+        <a href="user/{{ user.username }}">{{ user.username }}</a>
+      </nz-list-item-meta-title>
+
+      <nz-list-item-meta-description>
+        <div class="card-field">
+          <div class="field-label">Roles</div>
+          <div *ngFor="let role of user.roles">
+            <nz-tag nzColor="green" [class]="'tag ' + role.name.toLowerCase()">{{role.name}}</nz-tag>
+          </div>
+        </div>
+      </nz-list-item-meta-description>
+    </nz-list-item-meta>
+  </nz-list-item>
+</nz-list>
