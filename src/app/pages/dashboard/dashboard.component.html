@@ -19,7 +19,7 @@
   </div>
 
   <div *ngIf="roleCheck.isAdmin" class="grid-card">
-    <nz-card (click)="goTo('containers')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Departments">
+    <nz-card (click)="goTo('departments')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Departments">
       Click here to navigate to departments.
     </nz-card>
   </div>
@@ -36,8 +36,8 @@
             <ng-template #title>
               <div>
                 {{(department | titlecase) + ' department'}}
-                <nz-badge nzStandalone [nzCount]="statistics.parcelCountbyDepartment[department | titlecase]" nzShowZero>
-                  <a class="head-example"></a>
+                <nz-badge nzStandalone [nzStyle]="{ backgroundColor: '#52c41a' }" [nzCount]="statistics.parcelCountbyDepartment[department | titlecase]" nzShowZero>
+
                 </nz-badge>
               </div>
             </ng-template>
@@ -50,7 +50,7 @@
     </nz-card>
   </div>
   <div *ngIf="roleCheck.isAdmin" class="grid-card">
-    <nz-card (click)="goTo('containers')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Users">
+    <nz-card (click)="goTo('users')" [nzBodyStyle]="{'min-height': '10em'}" nzHoverable nzTitle="Users">
       Click here to navigate to users.
     </nz-card>
   </div>

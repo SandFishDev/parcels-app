@@ -1,9 +1,13 @@
 <nz-page-header>
   <nz-page-header-title>
-    Received containers
+    Received container
   </nz-page-header-title>
+  <nz-page-header-extra>
+    <ng-container *ngTemplateOutlet="uploadButton"></ng-container>
+  </nz-page-header-extra>
 </nz-page-header>
 <nz-list *ngIf="containers$ | async as containers" nzItemLayout="vertical">
+
   <ng-container *ngIf="containers.length > 0; else empty">
     <nz-list-item *ngFor="let container of containers" class="container-list-item">
       <nz-list-item-meta>
@@ -26,12 +30,26 @@
     </nz-list-item>
   </ng-container>
   <ng-template #empty>
-    <nz-list>
-      <nz-list-empty>
-        empty
-      </nz-list-empty>
-    </nz-list>
+    <nz-result [nzIcon]="'frown-twotone'" [nzTitle]="'Uh oh, we haven\'t received any containers yet!'">
+      <div nz-result-extra>
+        Upload one to start processing parcels.
+      </div>
+    </nz-result>
   </ng-template>
 
 </nz-list>
 
+
+<ng-template #uploadButton>
+  <nz-upload
+    [nzAccept]="'application/xml'"
+    [nzCustomRequest]="uploadFile"
+    [nzShowUploadList]="false"
+    nzType="select"
+  >
+    <button nz-button>
+      <i nz-icon nzType="upload"></i>
+      Click to Upload
+    </button>
+  </nz-upload>
+</ng-template>

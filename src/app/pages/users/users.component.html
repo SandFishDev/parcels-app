@@ -1,7 +1,7 @@
 
 <nz-page-header>
   <nz-page-header-title>
-    Received users
+    Users
   </nz-page-header-title>
 </nz-page-header>
 <nz-list nzItemLayout="vertical">
@@ -20,5 +20,27 @@
         </div>
       </nz-list-item-meta-description>
     </nz-list-item-meta>
+    <nz-list-item-extra>
+      <button nz-button (click)="openDepartmentCreationModal(user)">
+        Change Role
+      </button>
+    </nz-list-item-extra>
   </nz-list-item>
 </nz-list>
+
+<nz-modal [(nzVisible)]="roleToUserModalIsVisible" [nzFooter]="modalFooter" (nzOnCancel)="roleToUserModalIsVisible = false" nzTitle="Change Roles">
+  <ng-container *nzModalContent>
+    <form [formGroup]="changeUserRolesForm" nz-form>
+      <nz-form-item>
+        <nz-transfer
+          [nzDataSource]="list"
+          [nzTitles]="['Available', 'Selected']"
+          (nzChange)="change($event)"
+        ></nz-transfer>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button (click)="addRoleToUser()" nz-button nzType="primary">Change</button>
+  </ng-template>
+</nz-modal>

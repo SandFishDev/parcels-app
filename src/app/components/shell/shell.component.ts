@@ -10,7 +10,7 @@ import {DepartmentApiService} from "../../services/department-api.service";
   styleUrls: ['./shell.component.scss']
 })
 export class ShellComponent implements OnInit {
-  isCollapsed = false;
+  isCollapsed = true;
   roles: string[] = [];
 
   departments: Department[] = []

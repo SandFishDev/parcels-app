@@ -26,7 +26,7 @@
         </span>
       </li>
 
-      <li *ngIf="departments.length > 0" nz-submenu nzIcon="mail" nzOpen nzTitle="Parcels">
+      <li *ngIf="departments.length > 0" nz-submenu nzIcon="mail" nzTitle="Parcels">
         <ul *ngFor="let department of departments">
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="'/parcels/' + department.name.toLowerCase()">

@@ -9,10 +9,11 @@ import {NzIconModule} from "ng-zorro-antd/icon";
 import {NzPageHeaderModule} from "ng-zorro-antd/page-header";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {NzPopconfirmModule} from "ng-zorro-antd/popconfirm";
+import {NzResultModule} from "ng-zorro-antd/result";
 
 
 @NgModule({
-    imports: [ParcelsRoutingModule, NzListModule, CommonModule, NzIconModule, NzPageHeaderModule, NzButtonModule, NzPopconfirmModule],
+    imports: [ParcelsRoutingModule, NzListModule, CommonModule, NzIconModule, NzPageHeaderModule, NzButtonModule, NzPopconfirmModule, NzResultModule],
   declarations: [ParcelsComponent],
   exports: [ParcelsComponent]
 })

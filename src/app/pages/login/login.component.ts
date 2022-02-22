@@ -10,9 +10,9 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 
-  validateForm!: FormGroup;
+  validateForm: FormGroup;
 
-  constructor(private fb: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private router: Router,
               private authentication: AuthenticationApiService
   ) {
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
       this.router.navigateByUrl('/');
     }
 
-    this.validateForm = this.fb.group({
+    this.validateForm = this.formBuilder.group({
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
       remember: [true]

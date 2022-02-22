@@ -3,51 +3,57 @@
     Received {{department}} parcels
   </nz-page-header-title>
 </nz-page-header>
-<nz-list nzItemLayout="vertical">
-  <nz-list-item *ngFor="let parcel of parcels$ | async" class="parcels-list-item">
-    <nz-list-item-meta>
-      <nz-list-item-meta-title>
-        Parcel for {{ parcel.receipient.name }}
-      </nz-list-item-meta-title>
 
-      <nz-list-item-meta-description>
-        <div class="card-field">
-          <div class="field-label">Name</div>
-          <div>{{ parcel.receipient.name }}</div>
-        </div>
+<nz-list *ngIf="parcels$ | async as parcels" nzItemLayout="vertical">
+  <ng-container *ngIf="parcels.length > 0; else empty">
+    <nz-list-item *ngFor="let parcel of parcels" class="parcels-list-item">
+      <nz-list-item-meta>
+        <nz-list-item-meta-title>
+          Parcel for {{ parcel.receipient.name }}
+        </nz-list-item-meta-title>
 
-        <div class="card-field">
-          <div class="field-label">Destination</div>
-          <div>{{ parcel.receipient.address.street }} {{parcel.receipient.address.houseNumber}},
-            {{parcel.receipient.address.postalCode}}, {{parcel.receipient.address.city}}
+        <nz-list-item-meta-description>
+          <div class="card-field">
+            <div class="field-label">Name</div>
+            <div>{{ parcel.receipient.name }}</div>
           </div>
-        </div>
 
-        <div class="card-field">
-          <div class="field-label">Value</div>
-          <div>{{ parcel.value }} Eur</div>
-        </div>
+          <div class="card-field">
+            <div class="field-label">Destination</div>
+            <div>{{ parcel.receipient.address.street }} {{parcel.receipient.address.houseNumber}},
+              {{parcel.receipient.address.postalCode}}, {{parcel.receipient.address.city}}
+            </div>
+          </div>
 
-        <div class="card-field">
-          <div class="field-label">Weight</div>
-          <div>{{ parcel.weight }} KG</div>
-        </div>
-      </nz-list-item-meta-description>
-    </nz-list-item-meta>
+          <div class="card-field">
+            <div class="field-label">Value</div>
+            <div>{{ parcel.value }} Eur</div>
+          </div>
 
-    <ul nz-list-item-actions>
-      <nz-list-item-action>
-        <div>
-          <button nz-popconfirm=""
-                  nzPopconfirmTitle="Are you sure you want to process this parcel?"
-                  (nzOnConfirm)="processParcel(parcel.id)"
-                  nz-button nzType="primary">
-            Process
-            <i nz-icon nzType="arrow-right"></i>
-          </button>
-        </div>
-      </nz-list-item-action>
-    </ul>
+          <div class="card-field">
+            <div class="field-label">Weight</div>
+            <div>{{ parcel.weight }} KG</div>
+          </div>
+        </nz-list-item-meta-description>
+      </nz-list-item-meta>
 
-  </nz-list-item>
+      <ul nz-list-item-actions>
+        <nz-list-item-action>
+          <div>
+            <button (nzOnConfirm)="processParcel(parcel.id)"
+                    nz-button
+                    nz-popconfirm=""
+                    nzPopconfirmTitle="Are you sure you want to process this parcel?" nzType="primary">
+              Process
+              <i nz-icon nzType="arrow-right"></i>
+            </button>
+          </div>
+        </nz-list-item-action>
+      </ul>
+
+    </nz-list-item>
+  </ng-container>
+  <ng-template #empty>
+    <nz-result [nzIcon]="'smile-twotone'" [nzTitle]="'You\'re all done! No parcels to process.'"></nz-result>
+  </ng-template>
 </nz-list>

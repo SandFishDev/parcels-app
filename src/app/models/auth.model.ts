@@ -14,6 +14,7 @@ export interface User {
 }
 
 export interface UserWithRoles {
+  id: Number,
   username: string,
   roles: Role[]
 }

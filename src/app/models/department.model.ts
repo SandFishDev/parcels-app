@@ -1,4 +1,6 @@
 export interface Department {
   id: Number,
-  name: string
+  name: string,
+  successors: Number[],
+  successorsActual: Department[]
 }

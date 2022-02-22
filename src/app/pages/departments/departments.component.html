@@ -1,15 +1,60 @@
-
 <nz-page-header>
   <nz-page-header-title>
-    Received departments
+    Departments
   </nz-page-header-title>
+  <nz-page-header-extra>
+    <button (click)="openDepartmentCreationModal()" nz-button>
+      <i nz-icon nzType="plus"></i>
+      New department
+    </button>
+  </nz-page-header-extra>
 </nz-page-header>
 <nz-list nzItemLayout="vertical">
-  <nz-list-item class="department-list-item" *ngFor="let department of departments$ | async">
+  <nz-list-item *ngFor="let department of departments$ | async" class="department-list-item">
     <nz-list-item-meta>
       <nz-list-item-meta-title>
         <a href="department/{{ department.id }}">Department {{ department.name }}</a>
       </nz-list-item-meta-title>
+      <nz-list-item-meta-description>
+        <div class="card-field">
+          <div class="field-label">Successors</div>
+          <div *ngIf="department.successors.length > 0; else noSuccessors">
+            <span *ngFor="let successor of department.successorsActual">
+                {{successor.name}}
+            </span>
+
+          </div>
+          <ng-template #noSuccessors>
+            None
+          </ng-template>
+        </div>
+      </nz-list-item-meta-description>
     </nz-list-item-meta>
+    <nz-list-item-extra>
+      <button (click)="deleteDepartment(department.id)" nz-button nzDanger>
+        <i nz-icon nzType="delete"></i>
+      </button>
+    </nz-list-item-extra>
   </nz-list-item>
 </nz-list>
+
+<nz-modal [(nzVisible)]="departmentCreationModalIsVisible" [nzFooter]="modalFooter" (nzOnCancel)="departmentCreationModalIsVisible = false" nzTitle="Create Department">
+  <ng-container *nzModalContent>
+    <form [formGroup]="newDepartmentForm" nz-form>
+      <nz-form-item>
+        <nz-form-label
+          nzFor="name"
+          nzRequired
+        >
+          <span>Name</span>
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Please input the department name!">
+          <input formControlName="name" id="name" nz-input/>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button (click)="createDepartment()" nz-button nzType="primary">Create</button>
+  </ng-template>
+</nz-modal>
