@@ -1,11 +1,16 @@
-
 <nz-page-header>
   <nz-page-header-title>
     Users
   </nz-page-header-title>
+  <nz-page-header-extra>
+    <button (click)="openUserCreationModal()" nz-button>
+      <i nz-icon nzType="plus"></i>
+      New User
+    </button>
+  </nz-page-header-extra>
 </nz-page-header>
 <nz-list nzItemLayout="vertical">
-  <nz-list-item class="user-list-item" *ngFor="let user of users$ | async">
+  <nz-list-item *ngFor="let user of users$ | async" class="user-list-item">
     <nz-list-item-meta>
       <nz-list-item-meta-title>
         <a href="user/{{ user.username }}">{{ user.username }}</a>
@@ -15,32 +20,68 @@
         <div class="card-field">
           <div class="field-label">Roles</div>
           <div *ngFor="let role of user.roles">
-            <nz-tag nzColor="green" [class]="'tag ' + role.name.toLowerCase()">{{role.name}}</nz-tag>
+            <nz-tag [class]="'tag ' + role.name.toLowerCase()" nzColor="green">{{role.name}}</nz-tag>
           </div>
         </div>
       </nz-list-item-meta-description>
     </nz-list-item-meta>
     <nz-list-item-extra>
-      <button nz-button (click)="openDepartmentCreationModal(user)">
-        Change Role
-      </button>
+      <div class="button-row">
+        <button (click)="openRuleModal(user)" nz-button>
+          <i nz-icon nzType="setting"></i>
+          Roles
+        </button>
+        <button (click)="deleteUser(user.id)" nz-button nzDanger>
+          <i nz-icon nzType="delete"></i>
+        </button>
+      </div>
     </nz-list-item-extra>
   </nz-list-item>
 </nz-list>
 
-<nz-modal [(nzVisible)]="roleToUserModalIsVisible" [nzFooter]="modalFooter" (nzOnCancel)="roleToUserModalIsVisible = false" nzTitle="Change Roles">
+<nz-modal (nzOnCancel)="roleToUserModalIsVisible = false" [(nzVisible)]="roleToUserModalIsVisible"
+          [nzFooter]="modalFooterRoles" nzTitle="Change Roles">
   <ng-container *nzModalContent>
     <form [formGroup]="changeUserRolesForm" nz-form>
       <nz-form-item>
         <nz-transfer
+          (nzChange)="change($event)"
           [nzDataSource]="list"
           [nzTitles]="['Available', 'Selected']"
-          (nzChange)="change($event)"
         ></nz-transfer>
       </nz-form-item>
     </form>
   </ng-container>
-  <ng-template #modalFooter>
+  <ng-template #modalFooterRoles>
     <button (click)="addRoleToUser()" nz-button nzType="primary">Change</button>
+  </ng-template>
+</nz-modal>
+
+<nz-modal (nzOnCancel)="userCreationModalIsVisible = false" [(nzVisible)]="userCreationModalIsVisible"
+          [nzFooter]="modalFooterCreation" nzTitle="Create User">
+  <ng-container *nzModalContent>
+    <form [formGroup]="newUserForm" nz-form>
+      <nz-form-item>
+        <nz-form-label nzFor="username" nzRequired>
+          <span>Name</span>
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Please input the username.">
+          <input formControlName="username" id="username" nz-input/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="password" nzRequired>
+          <span>Password</span>
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Please input a password.">
+          <input formControlName="password" id="password" type="password" nz-input/>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <button (click)="createUser()" nz-button nzType="primary">Create</button>
+  </ng-container>
+  <ng-template #modalFooterCreation>
+    <button (click)="createUser()" nz-button nzType="primary">Create</button>
   </ng-template>
 </nz-modal>

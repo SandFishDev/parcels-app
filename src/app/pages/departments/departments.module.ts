@@ -12,11 +12,16 @@ import {NzModalModule} from "ng-zorro-antd/modal";
 import {NzFormModule} from "ng-zorro-antd/form";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NzInputModule} from "ng-zorro-antd/input";
+import {NzInputNumberModule} from "ng-zorro-antd/input-number";
+import {NzSelectModule} from "ng-zorro-antd/select";
+import {NzDividerModule} from "ng-zorro-antd/divider";
+import {SuccessorModalComponent} from "../../components/modals/successor-modal/successor-modal.component";
+import {NzResultModule} from "ng-zorro-antd/result";
 
 
 @NgModule({
-  imports: [DepartmentsRoutingModule, NzListModule, CommonModule, NzIconModule, NzPageHeaderModule, NzButtonModule, NzModalModule, NzFormModule, ReactiveFormsModule, NzInputModule],
-  declarations: [DepartmentsComponent],
+    imports: [DepartmentsRoutingModule, NzListModule, CommonModule, NzIconModule, NzPageHeaderModule, NzButtonModule, NzModalModule, NzFormModule, ReactiveFormsModule, NzInputModule, NzInputNumberModule, NzSelectModule, NzDividerModule, NzResultModule],
+    declarations: [DepartmentsComponent, SuccessorModalComponent],
   exports: [DepartmentsComponent]
 })
 export class DepartmentsModule { }

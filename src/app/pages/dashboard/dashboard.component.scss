@@ -9,6 +9,11 @@
     }
   }
 
+  .grid-fill {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
   .card-field {
     display: flex;
 

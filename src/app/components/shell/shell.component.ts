@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {Department} from "../../models/department.model";
-import {Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 import {AuthenticationApiService} from "../../services/authentication-api.service";
 import {DepartmentApiService} from "../../services/department-api.service";
+import {Title} from "@angular/platform-browser";
+import Utils from "../shared/utils";
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-shell',
@@ -16,11 +19,21 @@ export class ShellComponent implements OnInit {
   departments: Department[] = []
 
   constructor(private router: Router,
+              private titleService: Title,
               private authentication: AuthenticationApiService,
               private departmentService: DepartmentApiService) {
   }
 
   ngOnInit(): void {
+    this.router.events.pipe(
+
+    ).subscribe(result => {
+      let split = decodeURIComponent(this.router.url).split('/');
+      this.titleService.setTitle(
+        Utils.capitalize(split[split.length - 1])
+      )
+    })
+
     this.authentication.rolesSubject.subscribe(roles => {
       this.roles = roles;
 

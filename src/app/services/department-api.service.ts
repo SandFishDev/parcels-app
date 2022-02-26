@@ -18,9 +18,7 @@ export class DepartmentApiService {
       map(departments => {
           return departments.map(department => {
             return {
-              id: department.id,
-              name: department.name,
-              successors: department.successors,
+              ...department,
               successorsActual: department.successors.map(successor => departments.find(value => value.id === successor)!!)
             }
           })
@@ -37,7 +35,13 @@ export class DepartmentApiService {
     return this.http.post<void>(`${this.DEPARTMENT_ENDPOINT}`, department)
   }
 
+  updateRulesAndPriority(id: Number, department: Partial<Department>) : Observable<void> {
+    return this.http.put<void>(`${this.DEPARTMENT_ENDPOINT}/${id}/rules`, department)
+  }
+
   deleteDepartment(id: Number) {
     return this.http.delete(`${this.DEPARTMENT_ENDPOINT}/${id}`)
   }
+
+
 }

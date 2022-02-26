@@ -12,4 +12,10 @@
       width: 10em;
     }
   }
+
+  .button-row {
+    button:not(:last-child) {
+      margin-right: 0.4em;
+    }
+  }
 }

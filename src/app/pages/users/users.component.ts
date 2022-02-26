@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
-import {Role, UserWithRoles} from "../../models/auth.model";
+import {BehaviorSubject, Observable, switchMapTo} from "rxjs";
+import {Role, User, UserWithRoles} from "../../models/auth.model";
 import {UserApiService} from "../../services/user-api.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TransferChange, TransferItem} from "ng-zorro-antd/transfer";
@@ -13,10 +13,14 @@ import {RoleApiService} from "../../services/role-api.service";
 })
 export class UsersComponent implements OnInit {
 
+  trigger$ = new BehaviorSubject(true);
   users$: Observable<UserWithRoles[]>;
 
   roleToUserModalIsVisible = false;
   changeUserRolesForm: FormGroup;
+
+  userCreationModalIsVisible = false;
+  newUserForm: FormGroup;
 
   roles: Role[] = [];
   list: TransferItem[] = [];
@@ -29,6 +33,11 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.users$ = this.trigger$.pipe(
+      switchMapTo(this.userService.getUsers())
+    )
+
     this.roleService.getRoles().subscribe(roles => {
       this.roles = roles;
       this.list = roles.map(role => {
@@ -38,16 +47,19 @@ export class UsersComponent implements OnInit {
       })
     })
 
-    this.users$ = this.userService.getUsers();
-
     this.changeUserRolesForm = this.formBuilder.group({
       id: [null, [Validators.required]],
       username: [null,  [Validators.required]],
       roles: [[]], //Not required since empty list is allowed
     });
+
+    this.newUserForm = this.formBuilder.group({
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+    });
   }
 
-  openDepartmentCreationModal(user: UserWithRoles) {
+  openRuleModal(user: UserWithRoles) {
     this.list = this.list.map(item => {
       return {
         ...item,
@@ -62,7 +74,6 @@ export class UsersComponent implements OnInit {
   }
 
   addRoleToUser() {
-    console.log('check', this.changeUserRolesForm,  this.changeUserRolesForm.controls['roles'].value)
     if (this.changeUserRolesForm.valid) {
         this.userService.updateUser(
           this.changeUserRolesForm.controls['id'].value,
@@ -71,7 +82,12 @@ export class UsersComponent implements OnInit {
             username: this.changeUserRolesForm.controls['username'].value,
             roles: this.changeUserRolesForm.controls['roles'].value
           }
-        ).subscribe()
+        ).subscribe(
+          () => {
+            this.trigger$.next(true)
+            this.roleToUserModalIsVisible = false;
+          }
+        )
     }
   }
 
@@ -89,6 +105,38 @@ export class UsersComponent implements OnInit {
     if ($event.from === "right") {
       let cleanedRules = currentUserRoles.filter(role => !$event.list.map(i => i.title).includes(role.name))
       this.changeUserRolesForm.controls['roles'].setValue(cleanedRules)
+    }
+  }
+
+  deleteUser(id: Number) {
+    this.userService.deleteUser(id).subscribe(
+      () => {
+        this.trigger$.next(true)
+      }
+    )
+  }
+
+  openUserCreationModal() {
+      this.userCreationModalIsVisible = true;
+  }
+
+  createUser() {
+    console.log('ehg?')
+    if(this.newUserForm.valid){
+      let user : User = {
+        username: this.newUserForm.get('username')!.value,
+        password: this.newUserForm.get('password')!.value
+      }
+
+      this.userService.createUser(user).subscribe(
+        () => {
+          console.log('closing modal')
+          this.userCreationModalIsVisible = false;
+          this.trigger$.next(true)
+        }
+      )
+    }else {
+      console.log('invalid')
     }
   }
 }

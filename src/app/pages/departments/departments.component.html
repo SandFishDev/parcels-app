@@ -9,43 +9,70 @@
     </button>
   </nz-page-header-extra>
 </nz-page-header>
-<nz-list nzItemLayout="vertical">
-  <nz-list-item *ngFor="let department of departments$ | async" class="department-list-item">
-    <nz-list-item-meta>
-      <nz-list-item-meta-title>
-        <a href="department/{{ department.id }}">Department {{ department.name }}</a>
-      </nz-list-item-meta-title>
-      <nz-list-item-meta-description>
-        <div class="card-field">
-          <div class="field-label">Successors</div>
-          <div *ngIf="department.successors.length > 0; else noSuccessors">
+<nz-list *ngIf="departments$ | async as departments" nzItemLayout="vertical" nzItemLayout="vertical">
+  <ng-container *ngIf="departments.length > 0; else empty">
+    <nz-list-item *ngFor="let department of departments" class="department-list-item">
+      <nz-list-item-meta>
+        <nz-list-item-meta-title>
+          <a href="department/{{ department.id }}">Department {{ department.name }}</a>
+        </nz-list-item-meta-title>
+        <nz-list-item-meta-description>
+          <div class="card-field">
+            <div class="field-label">Priority</div>
+            {{department.priority}}
+          </div>
+
+          <div class="card-field">
+            <div class="field-label">Successors</div>
+            <div *ngIf="department.successors.length > 0; else noSuccessors">
             <span *ngFor="let successor of department.successorsActual">
                 {{successor.name}}
             </span>
-
+            </div>
+            <ng-template #noSuccessors>
+              None
+            </ng-template>
           </div>
-          <ng-template #noSuccessors>
-            None
-          </ng-template>
+
+          <div class="card-field">
+            <div class="field-label">Rules</div>
+            <div>
+              <div *ngFor="let rule of department.rules">
+                <div>
+                  {{rule.key}} {{rule.sign}} {{rule.value}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </nz-list-item-meta-description>
+      </nz-list-item-meta>
+      <nz-list-item-extra>
+
+        <div class="button-row">
+          <button (click)="openDepartmentRulesModal(department)" nz-button>
+            <i nz-icon nzType="control"></i>
+            Configuration
+          </button>
+
+          <button (click)="deleteDepartment(department.id)" nz-button nzDanger>
+            <i nz-icon nzType="delete"></i>
+          </button>
         </div>
-      </nz-list-item-meta-description>
-    </nz-list-item-meta>
-    <nz-list-item-extra>
-      <button (click)="deleteDepartment(department.id)" nz-button nzDanger>
-        <i nz-icon nzType="delete"></i>
-      </button>
-    </nz-list-item-extra>
-  </nz-list-item>
+      </nz-list-item-extra>
+    </nz-list-item>
+  </ng-container>
+  <ng-template #empty>
+    <nz-result [nzIcon]="'frown-twotone'" [nzTitle]="'Oof! There are no departments yet.'">
+    </nz-result>
+  </ng-template>
 </nz-list>
 
-<nz-modal [(nzVisible)]="departmentCreationModalIsVisible" [nzFooter]="modalFooter" (nzOnCancel)="departmentCreationModalIsVisible = false" nzTitle="Create Department">
+<nz-modal (nzOnCancel)="departmentCreationModalIsVisible = false" [(nzVisible)]="departmentCreationModalIsVisible"
+          [nzFooter]="modalFooter" nzTitle="Create Department">
   <ng-container *nzModalContent>
     <form [formGroup]="newDepartmentForm" nz-form>
       <nz-form-item>
-        <nz-form-label
-          nzFor="name"
-          nzRequired
-        >
+        <nz-form-label nzFor="name" nzRequired>
           <span>Name</span>
         </nz-form-label>
         <nz-form-control nzErrorTip="Please input the department name!">
@@ -58,3 +85,10 @@
     <button (click)="createDepartment()" nz-button nzType="primary">Create</button>
   </ng-template>
 </nz-modal>
+
+
+<app-successor-modal (onCancel)="cancelSelection()"
+                     (onSave)="updateRules($event)"
+                     *ngIf="selectedDepartment"
+                     [department]="selectedDepartment"
+></app-successor-modal>

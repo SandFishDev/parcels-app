@@ -35,11 +35,8 @@ export class DashboardComponent implements OnInit {
     this.roleCheck.departments = roles.filter(role => role !== "USER" && role !== "ADMIN")
 
     this.containerStatistics$ = this.containers.getContainerStatistics();
-    this.parcelStatistics$ = this.parcels.getParcelStatistics().pipe(
-      tap((input) => {
-        console.log(input)
-      })
-    )
+    this.parcelStatistics$ = this.parcels.getParcelStatistics();
+
 
   }
 

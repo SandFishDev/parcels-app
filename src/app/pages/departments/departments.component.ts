@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Department} from "../../models/department.model";
 import {DepartmentApiService} from "../../services/department-api.service";
-import {Observable, tap} from "rxjs";
+import {BehaviorSubject, Observable, switchMapTo, tap} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -12,7 +12,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class DepartmentsComponent implements OnInit {
 
   departments$: Observable<Department[]>;
+  trigger$ = new BehaviorSubject(true);
+
   departmentCreationModalIsVisible = false;
+  departmentSuccessorModalIsVisible = false;
+
+  selectedDepartment?: Department;
 
   newDepartmentForm: FormGroup;
 
@@ -22,7 +27,9 @@ export class DepartmentsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.departments$ = this.departmentService.getDepartments()
+    this.departments$ = this.trigger$.pipe(
+      switchMapTo(this.departmentService.getDepartments())
+    )
 
     this.newDepartmentForm = this.formBuilder.group({
       name: [null, [Validators.required]],
@@ -30,31 +37,53 @@ export class DepartmentsComponent implements OnInit {
     });
   }
 
-  openDepartmentCreationModal() {
-    this.departmentCreationModalIsVisible = true
+  openDepartmentCreationModal = () => this.departmentCreationModalIsVisible = true;
+  openDepartmentSuccessorModal = () => this.departmentSuccessorModalIsVisible = true;
+
+  openDepartmentRulesModal(department: Department) {
+    this.selectedDepartment = department;
   }
 
   createDepartment() {
     if (this.newDepartmentForm.valid) {
       let department: Partial<Department> = {
         name: this.newDepartmentForm.value.name,
+        priority: 1,
+        rules: [],
         successors: []
       }
 
       this.departmentService.createDepartment(department).pipe(
         tap(() => {
-          console.log('department created');
           this.departmentCreationModalIsVisible = false
         })
-      ).subscribe()
+      ).subscribe(() => {
+        this.trigger$.next(true)
+      })
     }
   }
 
   deleteDepartment(id: Number) {
-    this.departmentService.deleteDepartment(id).pipe(
-      tap(() => console.log('department deleted'))
-    ).subscribe()
+    this.departmentService.deleteDepartment(id).subscribe(() => {
+      this.trigger$.next(true)
+    })
   }
 
 
+  updateSuccessors(id: Number) {
+
+
+  }
+
+  updateRules(department: Department) {
+    this.departmentService.updateRulesAndPriority(department.id, department)
+      .subscribe(() => {
+        this.cancelSelection();
+        this.trigger$.next(true)
+      })
+  }
+
+  cancelSelection() {
+    this.selectedDepartment = undefined;
+  }
 }

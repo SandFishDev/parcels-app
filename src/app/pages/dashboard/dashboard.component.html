@@ -10,12 +10,11 @@
         </div>
 
         <div class="card-field">
-          <div class="field-label">Last 24h</div>
+          <div class="field-label">Last 24 Hours</div>
           <div>   {{statistics.containerCountLast24Hours}}</div>
         </div>
       </div>
     </nz-card>
-
   </div>
 
   <div *ngIf="roleCheck.isAdmin" class="grid-card">
@@ -36,7 +35,9 @@
             <ng-template #title>
               <div>
                 {{(department | titlecase) + ' department'}}
-                <nz-badge nzStandalone [nzStyle]="{ backgroundColor: '#52c41a' }" [nzCount]="statistics.parcelCountbyDepartment[department | titlecase]" nzShowZero>
+                <nz-badge [nzCount]="statistics.parcelCountbyDepartment[department | titlecase]"
+                          [nzStyle]="{ backgroundColor: '#52c41a' }"
+                          nzShowZero nzStandalone>
 
                 </nz-badge>
               </div>
@@ -54,4 +55,13 @@
       Click here to navigate to users.
     </nz-card>
   </div>
+
+  <div *ngIf="!roleCheck.isAdmin && roleCheck.departments.length === 0" class="grid-fill">
+    <nz-result [nzIcon]="'frown-twotone'" [nzTitle]="'You do not have any rights in this application yet!'">
+      <div nz-result-extra>
+        Ask your admin for more authorizations
+      </div>
+    </nz-result>
+  </div>
+
 </div>

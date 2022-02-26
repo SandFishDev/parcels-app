@@ -21,4 +21,11 @@ export class UserApiService {
     return this.http.put<UserWithRoles[]>(`${this.USERS_ENDPOINT}/${id}`, roles)
   }
 
+  deleteUser(id: Number): Observable<void>{
+    return this.http.delete<void>(`${this.USERS_ENDPOINT}/${id}`)
+  }
+
+  createUser(user: Partial<User>) : Observable<UserWithRoles[]>{
+    return this.http.post<UserWithRoles[]>(`${this.USERS_ENDPOINT}/register`, user)
+  }
 }

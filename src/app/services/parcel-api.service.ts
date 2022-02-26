@@ -16,12 +16,8 @@ export class ParcelApiService {
   }
 
   getParcelsByDepartment(department: Partial<Department>): Observable<Parcel[]> {
-    let params = new HttpParams().set('departmentType', department.name || "");
+    let params = new HttpParams().set('department', department.name || "");
     return this.http.get<Parcel[]>(`${this.PARCEL_ENDPOINT}`, {params})
-  }
-
-  getParcelbyId(id: Number): Observable<Parcel> {
-    return this.http.get<Parcel>(`${this.PARCEL_ENDPOINT}/${id}`);
   }
 
   processParcel(id: Number): Observable<Parcel> {
