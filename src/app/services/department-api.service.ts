@@ -36,7 +36,7 @@ export class DepartmentApiService {
   }
 
   updateRulesAndPriority(id: Number, department: Partial<Department>) : Observable<void> {
-    return this.http.put<void>(`${this.DEPARTMENT_ENDPOINT}/${id}/rules`, department)
+    return this.http.put<void>(`${this.DEPARTMENT_ENDPOINT}/${id}`, department)
   }
 
   deleteDepartment(id: Number) {

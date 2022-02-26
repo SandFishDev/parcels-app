@@ -1,0 +1,84 @@
+<nz-modal (nzOnCancel)="cancel()"
+          [nzFooter]="modalFooter"
+          nzTitle="Update Rules"
+          nzVisible="true"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="departmentForm" nz-form>
+      <nz-form-item>
+        <nz-form-label nzFor="prioritization" nzRequired>
+          <span>Priority</span>
+        </nz-form-label>
+        <nz-input-number [nzMax]="100" [nzMin]="1" [nzStep]="1" formControlName="priority"></nz-input-number>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="successors">
+          <span>Successors</span>
+        </nz-form-label>
+        <nz-select formControlName="successors" nzMode="multiple" nzPlaceHolder="Please select">
+          <nz-option *ngFor="let other of departments$ | async" [nzLabel]="other.name" [nzValue]="other.id"></nz-option>
+        </nz-select>
+      </nz-form-item>
+
+      <h4>Rules</h4>
+      <div *ngFor="let rule of ruleArray.controls; let i = index" [formArrayName]="'rules'" [nzGutter]="24" nz-row>
+        <ng-container [formGroup]="toGroup(rule)">
+          <div [nzSpan]="6" nz-col>
+            <nz-form-item [nzAlign]="'top'">
+              <nz-form-label *ngIf="i === 0" nzFor="field" nzRequired>
+                <span>Field</span>
+              </nz-form-label>
+              <nz-select formControlName="key">
+                <nz-option nzLabel="weight" nzValue="weight"></nz-option>
+                <nz-option nzLabel="value" nzValue="value"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+
+          <div [nzSpan]="6" nz-col>
+            <nz-form-item [nzAlign]="'top'">
+              <nz-form-label *ngIf="i === 0" nzFor="field" nzRequired>
+                <span>Field</span>
+              </nz-form-label>
+              <nz-select formControlName="sign">
+                <nz-option nzLabel=">" nzValue=">"></nz-option>
+                <nz-option nzLabel="<" nzValue="<"></nz-option>
+                <nz-option nzLabel="=" nzValue="="></nz-option>
+                <nz-option nzLabel=">=" nzValue=">="></nz-option>
+                <nz-option nzLabel="<=" nzValue="<="></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+
+          <div [nzSpan]="6" nz-col>
+            <nz-form-item [nzAlign]="'top'">
+              <nz-form-label *ngIf="i === 0" nzFor="value" nzRequired>
+                <span>Value</span>
+              </nz-form-label>
+              <input formControlName="value" id="value" nz-input/>
+            </nz-form-item>
+          </div>
+
+          <div [nzSpan]="6" nz-col>
+            <nz-form-label *ngIf="i === 0" nzNoColon>
+
+            </nz-form-label>
+            <nz-form-item [nzAlign]="'top'">
+              <button (click)="removeRule(i)" nz-button nzDanger>
+                <i nz-icon nzType="delete"></i>
+              </button>
+            </nz-form-item>
+          </div>
+        </ng-container>
+      </div>
+      <button (click)="addRule() " nz-button nzType="primary">
+        <i nz-icon nzType="plus"></i>
+        Add Rule
+      </button>
+    </form>
+  </ng-container>
+</nz-modal>
+<ng-template #modalFooter>
+  <button (click)="save()" nz-button nzType="primary">Update</button>
+</ng-template>
